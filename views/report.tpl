@@ -14,7 +14,7 @@
       /* Custom container */
       .container-narrow {
         margin: 0 auto;
-        max-width: 800px;
+        max-width: 700px;
       }
       .container-narrow > hr {
         margin: 30px 0;
@@ -63,36 +63,40 @@
         <div class="container-narrow"> 
               <div class="masthead">
                 <ul class="nav nav-pills pull-right">
-                  <li class="active"><a href="/">Home</a></li>
+                  <li><a href="/">Home</a></li>
                   <li><a href="/manage">Manage</a></li>
-                  <li><a href="/report">Reports</a></li>
+                  <li class="active"><a href="/report">Reports</a></li>
                 </ul>                
-              </div>   
-              <div class="jumbotron">
-                <a href="/"><img src="views/ta2logo_800.gif" class="img-rounded navbar"/></a>
-                <hr>
-                  <div class="controls">
-                      <select id="SelectedRelay">
-                        <option value=''>---</option> 
-                        %for relay in relays:
-                        <option>{{relay['relay_number']}}</option>
-                        %end
-                      </select>
-                  </div>
-                  <h4 id="error" class="hidden alert-error">Select a Relay before you start the timer.</h4>
-                  <span id="box_time" align="center" class="img-rounded label label-info">00:00:00.0</span><br><br>
-                  <span id="start_timer" align="center" class="img-rounded btn btn-large btn-primary btn-start">Start</span>
               </div>              
               <div class="row-fluid">
                 <div class="span12">
                   <h4>Track Runners</h4>
                     <table class="table table-bordered span12">
                       <thead>
-                        <th class="span2">Bib Number</th>
-                        <th class="span8">Progress</th>
-                        <th class="span2">Total Time</th>
+                        <th class="span1">Bib Number</th>
+                        <th class="span3">Name</th>
+                        <th class="span7">Split Times</th>
+                        <th class="span1">Total Time</th>
                       </thead>
-                      <tbody id="list_of_runners">                        
+                      <tbody id="list_of_runners"> 
+                        %for result in results:
+                        <tr>
+                          <td>{{result['bib_number']}}
+                          </td>
+                          <td>{{result['name']}}
+                          </td>
+                          <td>
+                            <div class='progress progress-striped active'>
+                              % numLaps = len(result['laps'])
+                              %for i in range (0,numLaps):
+                              <div class='bar'  style='width: 25%;'>{{result['laps'][i]['time']}}</div>
+                              %end
+                            </div> 
+                          </td>
+                          <td>{{result['total_time']}}
+                          </td>
+                        %end
+                        </tr>                       
                       </tbody>
                     </table>                                                      
                 </div>
@@ -102,13 +106,11 @@
 
   <script type="text/javascript" src="views/jquery.js"></script>
   <script type="text/javascript" src="views/bootstrap.min.js"></script>
-  <script type="text/javascript">      
+  <script type="text/javascript">
       var refreshtime;
-      var relay_number;
-      $('#start_timer').click(function(){
-        if($('#SelectedRelay').val().length>0){
+      $('#start_timer').click(function(){ 
         $('#start_timer').removeClass('btn-start');
-        $('a').bind('click', function(e){e.preventDefault();})        
+        $('a').bind('click', function(e){e.preventDefault();})
         $(this).text(function(i, text){                               
             var timer_start = {timer : "Start"};
             var timer_stop = {timer: "Stop"};
@@ -138,29 +140,6 @@
                                 });
                               });                              
                             }, 100);
-                  $('#list_of_runners').delegate('div.progress','click',function(){
-                    var bib_no = $(this).parent().siblings('.bib').text();                    
-                    var that = $(this);
-                    var class_id = ".bib_"+bib_no;
-                      $.ajax({
-                        type: 'GET',
-                        url: '/add_runner_time',
-                        data: {'bib_no': bib_no, 'relay_number':relay_number},
-                        datatype: "json",
-                        success: function(response){
-                            var html_data = "<div class='bar'  style='width: 25%;'>"+response['elapsed']+"</div>";
-                            $(that).append(html_data);
-                            if(response['lap']==4){
-                              $(that).parent().siblings('.total_time').text(response['total_time']);
-                              $(that).parents().siblings('.progress').unbind('click');
-                            }
-                        },
-                        error: function(response){
-
-                        }
-                      });
-                      
-                   });                   
                  }
 
               },
@@ -170,45 +149,7 @@
             });          
           return text === "Start"?"Stop" : "Start";          
         });
-        }
-        else{
-          $('#error').removeClass('hidden');
-          setInterval(function(){             
-            $('#error').addClass('hidden'); 
-          },3000);
-          
-        } 
       });
-
-    $('#SelectedRelay').change(function(){
-      if($(this).val().length>0){
-        relay_number = $(this).val()
-        $('#list_of_runners').text('');
-        $.ajax({
-          type: 'GET',
-          url: '/get_relay_runners',
-          data: {'relay_number': relay_number},
-          datatype: "json",
-          success: function(response){
-            var number_of_runners = response['relay_runners'].length;
-            var runners = response['relay_runners'];            
-            var html_data = '';
-            $.each(runners,function(){
-              $.each(this, function(k){
-                var bib_no = this[k];
-                html_data = html_data+"<tr><td class='bib'>"+bib_no+"</td><td><div class='progress progress-striped active'></div></td><td class='total_time'>00:00:00.0</td></tr>"
-              })
-            })
-            $('#list_of_runners').append(html_data);            
-          },
-          error: function(response){
-            console.log(response);
-          }
-
-        });
-      }
-
-    })
                
   </script>
   </body>
