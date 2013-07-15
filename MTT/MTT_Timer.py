@@ -18,8 +18,14 @@ __maintainer__ = "Shashidhar Dakuri"
 __email__ = "shashidhar.dakuri@gmail.com"
 __status__ = "Beta"
 
-connection = pymongo.MongoClient("mongodb://localhost")
-db = connection.runners
+#connection = pymongo.MongoClient("mongodb://localhost")
+#db = connection.runners
+
+connection = pymongo.Connection(os.environ['OPENSHIFT_MONGODB_DB_HOST'],
+                               int(os.environ['OPENSHIFT_MONGODB_DB_PORT']))
+db = connection[os.environ['OPENSHIFT_APP_NAME']]
+db.authenticate(os.environ['OPENSHIFT_MONGODB_DB_USERNAME'],
+                      os.environ['OPENSHIFT_MONGODB_DB_PASSWORD'])
 runners_collection = db.runners
 relays_collection = db.relays
 timing_collection = db.timing
