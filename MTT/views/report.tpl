@@ -3,8 +3,8 @@
 <html>
   <head>
     <title>Team Asha Mile Time Trial</title>
-    <link type="text/css" media="all" href="views/bootstrap.min.css" rel="stylesheet" />
-    <link type="text/css" media="all" href="views/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link type="text/css" media="all" href="static/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" media="all" href="static/bootstrap-responsive.min.css" rel="stylesheet" />
     <style type="text/css">
       body {
         padding-top: 20px;
@@ -104,8 +104,8 @@
           <hr>      
         </div> <!-- /container -->
 
-  <script type="text/javascript" src="views/jquery.js"></script>
-  <script type="text/javascript" src="views/bootstrap.min.js"></script>
+  <script type="text/javascript" src="static/jquery.js"></script>
+  <script type="text/javascript" src="static/bootstrap.min.js"></script>
   <script type="text/javascript">
       var refreshtime;
       $('#start_timer').click(function(){ 

@@ -3,8 +3,8 @@
 <html>
   <head>
     <title>Team Asha Mile Time Trial</title>
-    <link type="text/css" media="all" href="views/bootstrap.min.css" rel="stylesheet" />
-    <link type="text/css" media="all" href="views/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link type="text/css" media="all" href="static/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" media="all" href="static/bootstrap-responsive.min.css" rel="stylesheet" />
     <style type="text/css">
       body {
         padding-top: 20px;
@@ -68,7 +68,7 @@
                   <li><a href="/report">Reports</a></li>
                 </ul>                
               </div>                 
-                <a href="/"><img src="views/ta2logo_800.gif" class="img-rounded navbar"/></a>
+                <a href="/"><img src="static/ta2logo_800.gif" class="img-rounded navbar"/></a>
                 <hr>
                 <div class="accordion" id="accordion1">
                 <div class="accordion-group">
@@ -218,8 +218,8 @@
           <hr>      
         </div> <!-- /container -->
 
-  <script type="text/javascript" src="views/jquery.js"></script>
-  <script type="text/javascript" src="views/bootstrap.min.js"></script>
+  <script type="text/javascript" src="static/jquery.js"></script>
+  <script type="text/javascript" src="static/bootstrap.min.js"></script>
   <script type="text/javascript">
       $('#cancel_form').click(function(){ 
         $(this).closest('form').find("input[type=text], textarea").val("");
