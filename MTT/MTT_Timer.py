@@ -29,10 +29,10 @@ __status__ = "Beta"
 
 MONGO_URL = os.environ.get('MONGOHQ_URL')
 
-if MONGOHQ_URL:
+if MONGO_URL:
 	connection = pymongo.MongoClient(MONGO_URL)
 	db = connection.runners
-elif:
+else:
 	connection = pymongo.MongoClient("mongodb://localhost")
 	db = connection.runners
 
