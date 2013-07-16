@@ -9,6 +9,8 @@ import bottle
 from bottle import route
 import pymongo
 import sys
+import os 
+
 __author__ = "Shashidhar Dakuri"
 __copyright__ = "Copyright 2013, Team Asha MTT project"
 __credits__ = ['John Paulett <http://blog.7oars.com> for the stopwatch module' ]
@@ -18,14 +20,14 @@ __maintainer__ = "Shashidhar Dakuri"
 __email__ = "shashidhar.dakuri@gmail.com"
 __status__ = "Beta"
 
-#connection = pymongo.MongoClient("mongodb://localhost")
-#db = connection.runners
+connection = pymongo.MongoClient("mongodb://localhost")
+db = connection.runners
 
-connection = pymongo.Connection(os.environ['OPENSHIFT_MONGODB_DB_HOST'],
-                               int(os.environ['OPENSHIFT_MONGODB_DB_PORT']))
-db = connection[os.environ['OPENSHIFT_APP_NAME']]
-db.authenticate(os.environ['OPENSHIFT_MONGODB_DB_USERNAME'],
-                      os.environ['OPENSHIFT_MONGODB_DB_PASSWORD'])
+# connection = pymongo.Connection(os.environ['OPENSHIFT_MONGODB_DB_HOST'],
+#                                int(os.environ['OPENSHIFT_MONGODB_DB_PORT']))
+# db = connection[os.environ['OPENSHIFT_APP_NAME']]
+# db.authenticate(os.environ['OPENSHIFT_MONGODB_DB_USERNAME'],
+#                       os.environ['OPENSHIFT_MONGODB_DB_PASSWORD'])
 runners_collection = db.runners
 relays_collection = db.relays
 timing_collection = db.timing
@@ -72,9 +74,9 @@ def ret_time():
 	__lapsedtime__ = str.format("\r %02d:%02d:%04.1f" % (h, m, s))
 	return __lapsedtime__
 
-@route("/views/:filename#.*#")
+@route("/static/:filename#.*#")
 def return_static(filename):
-	return bottle.static_file(filename, root='views/')	
+	return bottle.static_file(filename, root='static/')	
 
 @route('/')
 def return_page():
